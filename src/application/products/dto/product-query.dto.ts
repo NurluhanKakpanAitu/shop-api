@@ -7,7 +7,7 @@ export class ProductQueryDto {
   @ApiPropertyOptional({ example: 10, default: 10 })
   limit?: number;
 
-  @ApiPropertyOptional({ example: 'phone' })
+  @ApiPropertyOptional({  })
   search?: string;
 
   @ApiPropertyOptional({ enum: ['asc', 'desc'], default: 'asc' })

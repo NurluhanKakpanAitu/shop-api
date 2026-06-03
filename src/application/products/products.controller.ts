@@ -24,12 +24,16 @@ export class ProductsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Получить все продукты' })
   findAll(@Query() query: ProductQueryDto) {
     return this.productsService.findPaginated(query);
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Получить продукт по ID' })
   findById(@Param('id') id: string) {
     return this.productsService.findById(id);
