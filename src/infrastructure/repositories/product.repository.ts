@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IProductRepository } from '../../domain/products/product-repository.interface';
+import { IProductRepository, FindPaginatedParams, PaginatedResult } from '../../domain/products/product-repository.interface';
 import { Product } from '../../domain/products/product.model';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -64,6 +64,38 @@ export class ProductRepository implements IProductRepository {
   async findByOwnerId(ownerId: string): Promise<Product[]> {
     const data = await this.prisma.product.findMany({ where: { ownerId } });
     return data.map((d) => this.toDomain(d));
+  }
+
+  async findPaginated(params: FindPaginatedParams): Promise<PaginatedResult<Product>> {
+    const { page, limit, search, sortOrder = 'asc' } = params;
+    const skip = (page - 1) * limit;
+
+    const where = search
+      ? {
+          OR: [
+            { nameKz: { contains: search, mode: 'insensitive' as const } },
+            { nameEn: { contains: search, mode: 'insensitive' as const } },
+            { nameRu: { contains: search, mode: 'insensitive' as const } },
+          ],
+        }
+      : {};
+
+    const [data, total] = await Promise.all([
+      this.prisma.product.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { price: sortOrder },
+      }),
+      this.prisma.product.count({ where }),
+    ]);
+
+    return {
+      data: data.map((d) => this.toDomain(d)),
+      total,
+      page,
+      limit,
+    };
   }
 
   async create(product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Promise<Product> {

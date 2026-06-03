@@ -11,13 +11,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiOperation({ summary: 'Register a new user' })
+  @ApiOperation({ summary: 'Зарегистрировать нового пользователя' })
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
 
   @Post('login')
-  @ApiOperation({ summary: 'Login and get JWT token' })
+  @ApiOperation({ summary: 'Войти и получить JWT токен' })
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
   }
@@ -25,7 +25,7 @@ export class AuthController {
   @Get('get-info')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get current user info by token' })
+  @ApiOperation({ summary: 'Получить информацию о текущем пользователе по токену' })
   getInfo(@Req() req: { user: { id: string } }) {
     return this.authService.getInfo(req.user.id);
   }
