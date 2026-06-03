@@ -1,0 +1,14 @@
+# Dependencies
+node_modules
+
+# Environment
+.env
+
+# Build
+dist
+
+# Prisma generated client
+src/infrastructure/generated/prisma
+
+# IDE
+.idea
