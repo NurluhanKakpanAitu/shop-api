@@ -16,7 +16,7 @@ Backend на NestJS для мини-маркетплейса с JWT автори
 ### 1. Клонировать и установить зависимости
 
 ```bash
-git clone 
+git clone https://github.com/NurluhanKakpanAitu/shop-api.git
 cd shop-api
 npm install
 ```
